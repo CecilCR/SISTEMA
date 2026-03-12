@@ -53,8 +53,8 @@
         
         /* Feedback */
         .feedback { margin-top: 20px; padding: 15px 20px; border-radius: 8px; display: none; line-height: 1.5; animation: fadeIn 0.4s ease; }
-        .feedback.correct { background: var(--correct-bg); border-left: 4px solid var(--correct-border); display: block; color: #155724; }
-        .feedback.incorrect { background: var(--incorrect-bg); border-left: 4px solid var(--error); display: block; color: #721c24; }
+        .feedback.correct { background: var(--correct-bg); border-left: 4px solid var(--correct-border); color: #155724; }
+        .feedback.incorrect { background: var(--incorrect-bg); border-left: 4px solid var(--error); color: #721c24; }
         
         /* Controles */
         .btn { display: inline-block; padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600; margin-top: 20px; transition: background 0.3s ease; }
@@ -181,24 +181,21 @@
             }
         ];
 
-        // Estado y Tracking (Formato 2)
         let currentQuestion = 0;
         let score = 0;
-        let currentAttempts = 0; // Control de intentos múltiples
-        let userScores = new Array(questions.length).fill(0);
+        let currentAttempts = 0;
 
         function updateProgress() {
             const progress = (currentQuestion / questions.length) * 100;
             document.getElementById('progress-bar').style.width = progress + '%';
             document.getElementById('question-counter').textContent = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
             
-            // Calculamos el porcentaje real basado en los puntos posibles (20 por pregunta)
             const percentageScore = (score / (questions.length * 20)) * 100;
             document.getElementById('score-display').textContent = `🏆 ${Math.round(percentageScore)}%`;
         }
 
         function renderQuestion() {
-            currentAttempts = 0; // Resetear intentos para la nueva pregunta
+            currentAttempts = 0;
             const q = questions[currentQuestion];
             document.getElementById('q-text').textContent = `${currentQuestion + 1}. ${q.text}`;
             
@@ -213,8 +210,12 @@
                 optionsContainer.appendChild(btn);
             });
             
-            document.getElementById('feedback-box').className = 'feedback';
-            document.getElementById('feedback-box').style.display = 'none';
+            const feedbackBox = document.getElementById('feedback-box');
+            feedbackBox.className = 'feedback';
+            // Restablecemos el display a none para ocultarlo al inicio de cada pregunta
+            feedbackBox.style.display = 'none'; 
+            feedbackBox.innerHTML = '';
+            
             document.getElementById('next-btn').classList.add('hidden');
         }
 
@@ -223,17 +224,17 @@
             const feedbackBox = document.getElementById('feedback-box');
             const nextBtn = document.getElementById('next-btn');
             
+            // Forzar que la caja de retroalimentación sea SIEMPRE visible tras un clic
+            feedbackBox.style.display = 'block';
+            
             if (selectedIndex === q.correctAnswer) {
                 // Camino Correcto
                 btnElement.classList.add('correct');
                 
-                // Bloquear todas las opciones
                 document.querySelectorAll('.option').forEach(opt => opt.disabled = true);
                 
-                // Asignar puntaje SOLO si es el primer intento
                 if (currentAttempts === 0) {
                     score += 20;
-                    userScores[currentQuestion] = 20;
                 }
                 
                 feedbackBox.className = 'feedback correct';
@@ -243,14 +244,13 @@
                 updateProgress();
                 nextBtn.classList.remove('hidden');
             } else {
-                // Camino Incorrecto (Permite reintentar)
+                // Camino Incorrecto
                 currentAttempts++;
                 btnElement.classList.add('incorrect');
-                btnElement.disabled = true; // Solo deshabilitamos la opción errónea
+                btnElement.disabled = true;
                 
-                // Animación de error sutil
                 btnElement.classList.remove('shake');
-                void btnElement.offsetWidth; // Trigger reflow
+                void btnElement.offsetWidth;
                 btnElement.classList.add('shake');
                 
                 feedbackBox.className = 'feedback incorrect';
@@ -268,7 +268,6 @@
             }
         }
 
-        // 4 Niveles de Desempeño (Formato 2)
         function showResults() {
             document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('progress-bar').style.width = '100%';
@@ -285,7 +284,7 @@
             if (finalPercentage === 100) {
                 icon = '🏆';
                 message = '¡Dominio excepcional! Tu capacidad para integrar la teoría sistémica con la dinámica humana te permite diagnosticar escenarios complejos sin dudar. Excelente nivel analítico.';
-                launchConfetti(); // Confetti Doble al 100%
+                launchConfetti(); 
             } else if (finalPercentage >= 80) {
                 icon = '🎯';
                 message = '¡Muy buen desempeño! Evidencias un manejo sólido de los ecosistemas organizacionales. Tu siguiente nivel es afinar la predicción de impactos macroeconómicos sobre el clima laboral.';
@@ -318,12 +317,10 @@
             }
         }
 
-        // Botón reintentar mejorado (Formato 2)
         function resetQuiz() {
             currentQuestion = 0;
             score = 0;
             currentAttempts = 0;
-            userScores = new Array(questions.length).fill(0);
             
             document.getElementById('results-container').style.display = 'none';
             document.getElementById('quiz-container').style.display = 'block';
@@ -333,7 +330,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Inicialización
         resetQuiz();
     </script>
 </body>
