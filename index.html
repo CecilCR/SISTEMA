@@ -149,15 +149,17 @@
 
     let currentQ = 0;
     let score = 0;
+    let attempts = 0; // Control de intentos para no regalar puntaje
 
     function renderQuestion() {
+        attempts = 0; // Reiniciar intentos por cada pregunta nueva
         const qData = questions[currentQ];
         document.getElementById('q-text').innerText = (currentQ + 1) + ". " + qData.q;
         document.getElementById('question-counter').innerText = `Pregunta ${currentQ + 1} de ${questions.length}`;
         document.getElementById('progress').style.width = `${(currentQ / questions.length) * 100}%`;
         
         const optionsHtml = qData.options.map((opt, index) => 
-            `<button class="option-btn" onclick="selectOption(${index})">${opt}</button>`
+            `<button class="option-btn" id="btn-${index}" onclick="selectOption(${index})">${opt}</button>`
         ).join('');
         
         document.getElementById('options').innerHTML = optionsHtml;
@@ -171,21 +173,34 @@
         const buttons = document.querySelectorAll('.option-btn');
         const feedback = document.getElementById('feedback');
         
-        buttons.forEach(btn => btn.disabled = true);
-        
         if (selectedIndex === qData.correct) {
+            // Bloquear todos los botones al acertar
+            buttons.forEach(btn => btn.disabled = true);
             buttons[selectedIndex].classList.add('selected-correct');
             feedback.className = 'feedback-box correct';
             feedback.innerHTML = `<strong>✓ ¡Excelente análisis!</strong><br><br>${qData.feedbackC}`;
-            score += 20; 
-            document.getElementById('score-display').innerText = `🏆 ${score} Pts`;
+            
+            // Otorgar puntaje solo si es el primer intento
+            if (attempts === 0) {
+                score += 20; 
+                document.getElementById('score-display').innerText = `🏆 ${score} Pts`;
+            }
+            
+            document.getElementById('next-btn').style.display = 'inline-block';
         } else {
-            buttons[selectedIndex].classList.add('selected-incorrect');
+            // Registrar el intento fallido
+            attempts++;
+            // Deshabilitar SÓLO el botón incorrecto seleccionado
+            const selectedBtn = document.getElementById(`btn-${selectedIndex}`);
+            selectedBtn.classList.add('selected-incorrect');
+            selectedBtn.disabled = true;
+            
             feedback.className = 'feedback-box incorrect';
-            feedback.innerHTML = `<strong>💡 Pista reflexiva:</strong><br><br>${qData.feedbackI}`;
+            feedback.innerHTML = `<strong>💡 Pista reflexiva:</strong> Inténtalo de nuevo.<br><br>${qData.feedbackI}`;
+            
+            // Ocultar botón "Siguiente" forzando a reintentar
+            document.getElementById('next-btn').style.display = 'none';
         }
-        
-        document.getElementById('next-btn').style.display = 'inline-block';
     }
 
     function nextQuestion() {
@@ -207,14 +222,14 @@
         
         let msg = '';
         if (score === 100) {
-            msg = "🏆 <strong>Dominio excepcional.</strong> Has consolidado una visión sociotécnica magistral. Estás preparado para gestionar transformaciones profundas e intervenir sistémicamente.";
+            msg = "🏆 <strong>Dominio excepcional.</strong> Has consolidado una visión sociotécnica magistral sin necesidad de recalibración. Estás preparado para gestionar transformaciones profundas e intervenir sistémicamente.";
             triggerConfetti();
         } else if (score >= 80) {
             msg = "🎯 <strong>Muy buen desempeño.</strong> Demuestras un manejo sólido de los ecosistemas empresariales y de la transmutación de recursos.";
         } else if (score >= 60) {
-            msg = "📊 <strong>Desempeño adecuado.</strong> Tienes las bases, pero es clave afinar la predicción de cómo los factores del entorno impactan internamente.";
+            msg = "📊 <strong>Desempeño adecuado.</strong> Tienes las bases, pero requeriste iterar en tus respuestas. Es clave afinar la predicción de cómo los factores del entorno impactan internamente.";
         } else {
-            msg = "💪 <strong>Momento de reforzar.</strong> Te recomendamos revisar el concepto de 'transmutación de recursos' de Drucker y la estructura de sistemas abiertos.";
+            msg = "💪 <strong>Momento de reforzar.</strong> El ensayo y error es parte del aprendizaje. Te recomendamos revisar el concepto de 'transmutación de recursos' de Drucker y la estructura de sistemas abiertos.";
         }
         document.getElementById('results-msg').innerHTML = msg;
     }
