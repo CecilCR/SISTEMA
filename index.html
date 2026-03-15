@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz: La Empresa como Sistema</title>
-    <meta property="og:title" content="Quiz: La Empresa como Sistema">
-    <meta property="og:description" content="Evaluación interactiva sobre dinámica organizacional y sistemas sociotécnicos.">
+    <title>La Empresa como Sistema - Quiz Interactivo</title>
+    <meta property="og:title" content="La Empresa como Sistema - Quiz Interactivo">
+    <meta property="og:description" content="Evalúa tu comprensión de la empresa como unidad económica y social">
     <meta property="og:type" content="sitio-web">
     <style>
-        /* Paleta de colores estándar - Formato 2 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary: #667eea;
             --secondary: #764ba2;
@@ -16,294 +21,529 @@
             --success: #28a745;
             --error: #dc3545;
             --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --text-dark: #333333;
             --text-primary: #2c3e50;
+            --text-secondary: #555555;
             --correct-bg: #d4edda;
             --correct-border: #28a745;
+            --correct-text: #155724;
             --incorrect-bg: #f8d7da;
             --incorrect-border: #dc3545;
+            --incorrect-text: #721c24;
+            --hint-bg: #fff3cd;
+            --hint-border: #856404;
+            --hint-text: #856404;
+            --option-hover-bg: #f0f4ff;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-light); color: var(--text-dark); margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
-        
-        /* Header y Top Bar */
-        .header { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 30px; text-align: center; }
-        .header h1 { margin: 0; font-size: 26px; }
-        .header p { margin: 10px 0 0; opacity: 0.9; }
-        
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: white; border-bottom: 1px solid #e0e0e0; }
-        .question-pill { background: #eaf2f8; padding: 8px 16px; border-radius: 20px; color: var(--text-primary); font-weight: 600; font-size: 14px; }
-        .score-pill { background: #e8f8f5; padding: 8px 16px; border-radius: 20px; color: var(--success); font-weight: 700; font-size: 14px; border: 1px solid var(--success); }
-        
-        /* Barra de progreso */
-        .progress-container { width: 100%; height: 8px; background: #e0e0e0; }
-        .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.5s ease; }
-        
-        /* Área de Contenido */
-        .content { padding: 30px; }
-        .question-text { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); }
-        .options-grid { display: flex; flex-direction: column; gap: 12px; }
-        
-        .option { background: white; border: 2px solid #e0e0e0; padding: 16px 20px; border-radius: 8px; text-align: left; font-size: 16px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; }
-        .option:hover:not(:disabled) { border-color: var(--primary); background: #f4f6ff; }
-        .option.correct { background: var(--correct-bg); border-color: var(--correct-border); color: #155724; font-weight: 600; }
-        .option.incorrect { background: var(--incorrect-bg); border-color: var(--incorrect-border); color: #721c24; opacity: 0.7; }
-        .option:disabled { cursor: not-allowed; }
-        
-        /* Feedback */
-        .feedback { margin-top: 20px; padding: 15px 20px; border-radius: 8px; display: none; line-height: 1.5; animation: fadeIn 0.4s ease; }
-        .feedback.correct { background: var(--correct-bg); border-left: 4px solid var(--correct-border); color: #155724; }
-        .feedback.incorrect { background: var(--incorrect-bg); border-left: 4px solid var(--error); color: #721c24; }
-        
-        /* Controles */
-        .btn { display: inline-block; padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600; margin-top: 20px; transition: background 0.3s ease; }
-        .btn:hover { background: var(--secondary); }
-        .btn.hidden { display: none; }
-        
-        /* Resultados */
-        .results { display: none; text-align: center; padding: 20px 0; }
-        .score-badge { font-size: 48px; font-weight: bold; color: var(--primary); margin: 15px 0; }
-        
-        /* Confetti */
-        #confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
-        .confetti { position: absolute; width: 10px; height: 10px; opacity: 0.8; animation: confetti-fall linear forwards; }
-        
-        /* Animaciones */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes confetti-fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .shake { animation: shake 0.4s ease; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        #confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            opacity: 0.8;
+            top: -10px;
+            animation: confetti-fall linear forwards;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .question-pill {
+            background: #eaf2f8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .score-pill {
+            background: #e8f8f5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1rem;
+            border: 1px solid var(--success);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+        }
+
+        .content {
+            padding: 40px 35px;
+        }
+
+        .question-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .option:hover:not(.disabled) {
+            background: var(--option-hover-bg);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-top: 4px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1.05em;
+            line-height: 1.5;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option.correct {
+            background: var(--correct-bg);
+            border-color: var(--correct-border);
+            animation: pulseGreen 0.5s ease;
+        }
+
+        .option.incorrect {
+            background: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes pulseGreen {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.7;
+            animation: slideIn 0.4s ease;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback.correct-feedback {
+            background: var(--correct-bg);
+            border-left: 5px solid var(--correct-border);
+            color: var(--correct-text);
+        }
+
+        .feedback.incorrect-feedback {
+            background: var(--incorrect-bg);
+            border-left: 5px solid var(--incorrect-border);
+            color: var(--incorrect-text);
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .correct-answer-display {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #856404;
+            font-weight: 600;
+            margin: 15px 0;
+            color: #856404;
+            display: none;
+        }
+
+        .correct-answer-display.show {
+            display: block;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.hidden {
+            display: none;
+        }
+
+        .results {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h2 {
+            color: var(--text-primary);
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .score-badge {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 20px 0;
+        }
+
+        .results p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin: 20px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
         @media (max-width: 768px) {
-            .content { padding: 20px; }
-            .header h1 { font-size: 22px; }
-            .option { padding: 14px; font-size: 15px; }
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .question-container {
+                padding: 20px;
+            }
+
+            .question-text {
+                font-size: 1.1em;
+            }
+
+            .option {
+                padding: 14px 16px;
+            }
+
+            .top-bar {
+                padding: 15px 20px;
+            }
+
+            .question-pill, .score-pill {
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header p {
+                font-size: 0.95em;
+            }
         }
     </style>
 </head>
 <body>
     <div id="confetti-container"></div>
-    
+
     <div class="container">
         <div class="header">
             <h1>🏢 La Empresa como Sistema</h1>
             <p>Fundamentos para la Gestión de Relaciones Organizacionales</p>
         </div>
-        
+
         <div class="top-bar">
             <span class="question-pill" id="question-counter">Pregunta 1 de 5</span>
-            <span class="score-pill" id="score-display">🏆 0%</span>
+            <span class="score-pill" id="score-display">🏆 0</span>
         </div>
-        
+
         <div class="progress-container">
-            <div class="progress-fill" id="progress-bar" style="width: 0%;"></div>
+            <div class="progress-fill" id="progress-bar" style="width: 20%;"></div>
         </div>
-        
+
         <div class="content">
             <div id="quiz-container">
-                <div class="question-text" id="q-text"></div>
-                <div class="options-grid" id="options-container"></div>
-                <div id="feedback-box" class="feedback"></div>
-                <button class="btn hidden" id="next-btn" onclick="nextQuestion()">Siguiente pregunta →</button>
+                <!-- Preguntas se renderizan dinámicamente aquí -->
             </div>
-            
+
             <div id="results-container" class="results">
-                <h2>📊 Diagnóstico de Competencias completado</h2>
-                <div class="score-badge" id="final-score">0%</div>
-                <p id="result-message" style="font-size: 18px; line-height: 1.6; color: var(--text-primary); margin-bottom: 25px;"></p>
-                <button class="btn" id="retry-btn" onclick="resetQuiz()">🔄 Reiniciar Evaluación</button>
+                <h2>📊 Cuestionario completado</h2>
+                <div class="score-badge" id="final-score">0/5</div>
+                <p id="result-message"></p>
+                <button class="btn" id="retry-btn">🔄 Volver a intentar</button>
             </div>
+
+            <button class="btn hidden" id="next-btn">Siguiente pregunta →</button>
         </div>
     </div>
 
     <script>
+        // Variables de estado con tracking
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+        const totalQuestions = 5;
+        let userAnswers = new Array(totalQuestions).fill(null);
+        let userScores = new Array(totalQuestions).fill(0);
+
+        // Referencias del DOM
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const nextBtn = document.getElementById('next-btn');
+        const retryBtn = document.getElementById('retry-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const questionCounter = document.getElementById('question-counter');
+        const scoreDisplay = document.getElementById('score-display');
+        const finalScoreSpan = document.getElementById('final-score');
+        const resultMessageP = document.getElementById('result-message');
+
+        // Preguntas del quiz - MEJORADAS PEDAGÓGICAMENTE
         const questions = [
             {
-                text: "Desde la Teoría de Sistemas, ¿cómo se conceptualiza estructuralmente a una empresa moderna?",
+                id: 1,
+                text: "Según el documento, ¿qué significa que la empresa es una 'unidad económica y social'?",
                 options: [
-                    "Un agrupamiento mecánico de recursos tangibles ordenados lógicamente para producir rentabilidad.",
-                    "Un conjunto de elementos dinámicamente relacionados que interactúan para lograr un propósito común.",
-                    "Una unidad económica aislada que depende exclusivamente de la extracción de bienes.",
-                    "Una entidad jurídica cuyo único propósito es la generación de ganancias sujetas a impuestos."
+                    "Que solo busca generar ganancias económicas para sus accionistas",
+                    "Que las relaciones humanas son más importantes que los resultados financieros",
+                    "Un ente ideal con personalidad jurídica que, para generar valor, debe integrar las dimensiones productiva y relacional",
+                    "Que separa claramente los objetivos económicos de los objetivos sociales"
                 ],
-                correctAnswer: 1,
-                feedbackCorrect: "Entender la empresa como un sistema de elementos interdependientes evita el reduccionismo y permite a los líderes anticipar cómo una decisión en un área funcional impactará sistémicamente en las demás.",
-                feedbackIncorrect: "Piensa en la organización no como un mecanismo estático, sino como un organismo vivo. ¿Qué alternativa destaca la 'interacción' entre áreas funcionales?"
+                correct: 2,
+                feedbackCorrect: "✓ ¡Excelente! Has captado la esencia. El documento enfatiza que la empresa es 'una persona jurídica' (dimensión formal) pero también 'una creación humana' y un 'sistema social' (dimensión humana). La generación de valor (económico) depende directamente de la calidad de las relaciones (social). En nuestro curso, este es el punto de partida: no se puede gestionar una organización sin gestionar las relaciones que la constituyen.",
+                feedbackIncorrect: "✗ La respuesta correcta es la que integra ambas dimensiones: 'Un ente ideal con personalidad jurídica que, para generar valor, debe integrar las dimensiones productiva y relacional'. Las otras opciones son reduccionistas: la primera solo mira lo económico, la segunda aísla los resultados del proceso social, y la cuarta ve a la empresa como una máquina (visión que Drucker critica explícitamente). La gestión de relaciones es el puente entre lo económico y lo social."
             },
             {
-                text: "Según el paradigma de Peter Drucker, ¿cuál es el verdadero motor que convierte recursos inertes en una empresa generadora de valor?",
+                id: 2,
+                text: "Según Peter Drucker, ¿qué es lo que realmente convierte los recursos en una empresa que genera valor?",
                 options: [
-                    "El capital financiero, tal como lo afirmaban los economistas del siglo XIX.",
-                    "La automatización intensiva de la Operación Tecnológica.",
-                    "La 'transmutación' de los recursos mediante una dirección efectiva y un liderazgo humano visionario.",
-                    "La separación estricta entre las funciones analíticas y la fuerza operativa."
+                    "El capital financiero suficiente para invertir en tecnología",
+                    "La dirección que organiza, decide y transforma los recursos",
+                    "La maquinaria y equipos de producción modernos",
+                    "El tamaño de la organización y su participación de mercado"
                 ],
-                correctAnswer: 2,
-                feedbackCorrect: "Drucker enfatiza que el capital por sí solo es inanimado. Es la dirección estratégica, el conocimiento y la dinámica humana las que logran esta 'transmutación' de recursos en valor de mercado.",
-                feedbackIncorrect: "Evalúa críticamente el rol del dinero. Si el capital financiero fuera suficiente por sí solo para crear valor, ¿qué papel fundamental jugarían entonces los líderes y gerentes organizacionales?"
+                correct: 1,
+                feedbackCorrect: "✓ ¡Correcto! Drucker lo dice claramente: convertir recursos en empresa 'requiere dirección'. No basta reunir recursos en orden lógico y 'girar la llave del capital'. Se necesita una 'transmutación' de los recursos, y esta solo puede venir de la dirección. Sin dirección, los recursos permanecen inertes. La dirección es el catalizador que da vida a la organización.",
+                feedbackIncorrect: "✗ La respuesta correcta es 'La dirección'. Drucker critica explícitamente la visión del siglo XIX que creía que bastaba reunir recursos y 'girar la llave del capital'. Lo que se necesita es una transmutación de los recursos, y esto requiere dirección. El capital, la tecnología y el tamaño son importantes, pero son recursos inertes sin la dirección que los organiza y transforma."
             },
             {
-                text: "En el ciclo de transformación empresarial, ¿qué diferencia estructural existe entre 'Productos/Servicios' y 'Resultados e Impacto'?",
+                id: 3,
+                text: "Un equipo de ventas logra cerrar un contrato importante, pero el área de producción no fue informada a tiempo y no puede cumplir con los plazos prometidos. ¿Qué principio sistémico de la empresa se violó en esta situación?",
                 options: [
-                    "Los productos son las entradas del sistema, y el impacto es el proceso de transformación.",
-                    "Los productos son salidas tangibles, mientras que el impacto incluye salidas intangibles como el desarrollo organizacional y la cultura.",
-                    "Ambos conceptos son sinónimos y representan la rentabilidad económica generada al final del ciclo.",
-                    "Los productos son evaluados por los clientes externos, y el impacto solo es auditado por entidades fiscales."
+                    "La independencia funcional que permite a cada área tomar decisiones autónomas sin consultar a otras",
+                    "La interrelación entre las partes del sistema, donde las acciones de un área impactan directamente en otras",
+                    "La especialización técnica que requiere que cada departamento se enfoque solo en su expertise",
+                    "La jerarquía organizacional que establece que solo la dirección debe coordinar entre áreas"
                 ],
-                correctAnswer: 1,
-                feedbackCorrect: "Diferenciar salidas tangibles de resultados intangibles (como la satisfacción del colaborador o la confianza de marca) es vital. Las empresas más resilientes miden ambos para asegurar su sostenibilidad.",
-                feedbackIncorrect: "Un producto es lo que la empresa vende, pero el impacto es lo que la empresa 'construye' en el camino. Busca la opción que incluya factores culturales o de desarrollo de talento."
+                correct: 1,
+                feedbackCorrect: "✓ ¡Excelente análisis! Este caso ilustra perfectamente la definición de sistema: 'conjunto de elementos dinámicamente relacionados, en interacción'. Cuando ventas actúa sin considerar la capacidad de producción, rompe la interrelación necesaria entre subsistemas. El documento enfatiza que insumos, planeación, operación y resultados están interconectados con retroalimentación constante. El éxito organizacional depende de que todas las áreas comprendan cómo sus acciones afectan al sistema completo. Esta visión sistémica es crucial para la gestión de relaciones organizacionales.",
+                feedbackIncorrect: "✗ La respuesta correcta destaca la interrelación entre partes. El documento define sistema como elementos 'dinámicamente relacionados, en interacción' que 'desarrollan una actividad para lograr un objetivo' común. En el caso presentado, ventas y producción NO actuaron como partes interrelacionadas. Las opciones que proponen independencia, especialización aislada o coordinación solo desde arriba contradicen la naturaleza sistémica donde cada parte debe conocer y considerar el impacto de sus acciones en las demás para lograr objetivos organizacionales."
             },
             {
-                text: "El 'Ambiente Externo' tensiona constantemente al sistema organizacional. ¿Qué variables pertenecen exclusivamente al entorno Específico (Microentorno)?",
+                id: 4,
+                text: "¿Cuál de los siguientes es un ejemplo de 'Ambiente Externo Específico' (y no de 'Ambiente Externo General')?",
                 options: [
-                    "Clientes directos, competidores actuales, proveedores y regulaciones de la industria.",
-                    "Factores macroeconómicos, crisis políticas, leyes laborales y sociología nacional.",
-                    "Infraestructuras tecnológicas globales y acuerdos comerciales internacionales.",
-                    "El nivel de seguridad psicológica y la comunicación interna entre los distintos departamentos."
+                    "Una nueva ley tributaria que afecta a todas las empresas del país",
+                    "El surgimiento de un producto sustitutivo innovador en el mercado de la empresa",
+                    "Un cambio cultural hacia el consumo sostenible que impacta todas las industrias",
+                    "La construcción de una red nacional de internet de alta velocidad"
                 ],
-                correctAnswer: 0,
-                feedbackCorrect: "El entorno Específico impacta tu cadena de valor directa. Como líder, gestionar estratégicamente tu relación con proveedores y competidores es fundamental para mantener la ventaja competitiva.",
-                feedbackIncorrect: "Recuerda que el entorno 'General' (macro) afecta a todo un país (ej. inflación), mientras que el 'Específico' abarca a los actores que participan en tu mismo mercado o sector comercial."
+                correct: 1,
+                feedbackCorrect: "✓ ¡Correcto! El documento explica que el ambiente específico incluye 'competidores actuales, potenciales' y 'productos substitutivos, alternativos'. Un producto sustitutivo innovador afecta directamente a la empresa y su sector específico. Las otras opciones pertenecen al ambiente general: nuevas leyes son factores político-legales, cambios culturales son factores sociológicos, e infraestructura tecnológica afecta a todas las empresas por igual.",
+                feedbackIncorrect: "✗ La respuesta correcta es el producto sustitutivo. El documento explica que el ambiente específico incluye clientes, proveedores, competidores y 'productos substitutivos, alternativos' que afectan directamente al sector. Las otras opciones son del ambiente general: las leyes son factores político-legales, los cambios culturales son sociológicos, y la infraestructura tecnológica afecta homogéneamente a todas las empresas."
             },
             {
-                text: "Si afirmamos que 'la empresa no es solo un sistema productivo, sino un sistema social', ¿qué implicación directa tiene esto en la gestión gerencial?",
+                id: 5,
+                text: "Una empresa tecnológica debe lanzar un producto innovador en 6 meses. El éxito depende de que ingeniería, marketing y operaciones trabajen coordinadamente. Si afirmamos que 'la empresa es un sistema social', ¿cuál es la principal responsabilidad del gerente general?",
                 options: [
-                    "Que la organización debe operar estructuralmente como una fundación, priorizando la responsabilidad social.",
-                    "Que la coordinación eficiente de recursos depende de relaciones humanas efectivas, impactando directamente en la rentabilidad.",
-                    "Que el área de Talento Humano debe asumir la dirección general de las decisiones financieras.",
-                    "Que el desarrollo de la infraestructura y el control de calidad técnica pasan a ser irrelevantes."
+                    "Contratar más personal técnico para asegurar que cada área tenga recursos suficientes",
+                    "Establecer metas individuales ambiciosas para cada departamento y dejar que compitan entre sí",
+                    "Facilitar la comunicación, confianza y colaboración entre las áreas para alinearlas hacia el objetivo común",
+                    "Delegar completamente la coordinación a los jefes de cada área sin intervenir directamente"
                 ],
-                correctAnswer: 1,
-                feedbackCorrect: "Reconocer a la empresa como sistema social evidencia que variables como el clima laboral, la confianza y la comunicación interna no son simples 'habilidades blandas', sino determinantes críticos del ROI.",
-                feedbackIncorrect: "¿De qué manera la calidad de las interacciones diarias, la motivación y la confianza hacia los líderes alteran la eficiencia con la que se utilizan los recursos materiales y el tiempo de los equipos?"
+                correct: 2,
+                feedbackCorrect: "✓ ¡Perfecto! Has comprendido la implicación gerencial del concepto 'sistema social'. El documento enfatiza que la coordinación de recursos depende de relaciones humanas efectivas, y que confianza, comunicación y liderazgo influyen directamente en resultados económicos. En este caso, el gerente no puede limitarse a asignar recursos o delegar: debe gestionar activamente las relaciones entre áreas. Esto es gestión de relaciones organizacionales en acción: crear las condiciones para que personas de diferentes subsistemas colaboren efectivamente hacia objetivos compartidos. Sin esto, los recursos técnicos no se transforman en valor.",
+                feedbackIncorrect: "✗ La respuesta correcta enfatiza que el gerente debe facilitar comunicación, confianza y colaboración. Como 'sistema social', la empresa no funciona solo con recursos (opción a) ni con competencia interna (opción b). El documento es claro: los factores relacionales influyen directamente en resultados. Tampoco es suficiente delegar (opción d): la gestión de relaciones es responsabilidad gerencial central, no algo que se puede tercerizar. El éxito del lanzamiento depende de que el gerente construya puentes entre las áreas, facilite el diálogo y alinee esfuerzos."
             }
         ];
 
-        let currentQuestion = 0;
-        let score = 0;
-        let currentAttempts = 0;
-
-        function updateProgress() {
-            const progress = (currentQuestion / questions.length) * 100;
-            document.getElementById('progress-bar').style.width = progress + '%';
-            document.getElementById('question-counter').textContent = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
-            
-            const percentageScore = (score / (questions.length * 20)) * 100;
-            document.getElementById('score-display').textContent = `🏆 ${Math.round(percentageScore)}%`;
-        }
-
-        function renderQuestion() {
-            currentAttempts = 0;
-            const q = questions[currentQuestion];
-            document.getElementById('q-text').textContent = `${currentQuestion + 1}. ${q.text}`;
-            
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-            
-            q.options.forEach((optText, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'option';
-                btn.textContent = optText;
-                btn.onclick = () => selectOption(index, btn);
-                optionsContainer.appendChild(btn);
-            });
-            
-            const feedbackBox = document.getElementById('feedback-box');
-            feedbackBox.className = 'feedback';
-            // Restablecemos el display a none para ocultarlo al inicio de cada pregunta
-            feedbackBox.style.display = 'none'; 
-            feedbackBox.innerHTML = '';
-            
-            document.getElementById('next-btn').classList.add('hidden');
-        }
-
-        function selectOption(selectedIndex, btnElement) {
-            const q = questions[currentQuestion];
-            const feedbackBox = document.getElementById('feedback-box');
-            const nextBtn = document.getElementById('next-btn');
-            
-            // Forzar que la caja de retroalimentación sea SIEMPRE visible tras un clic
-            feedbackBox.style.display = 'block';
-            
-            if (selectedIndex === q.correctAnswer) {
-                // Camino Correcto
-                btnElement.classList.add('correct');
-                
-                document.querySelectorAll('.option').forEach(opt => opt.disabled = true);
-                
-                if (currentAttempts === 0) {
-                    score += 20;
-                }
-                
-                feedbackBox.className = 'feedback correct';
-                feedbackBox.innerHTML = `<strong>✓ ¡Excelente análisis!</strong><br><br>${q.feedbackCorrect}`;
-                
-                launchConfetti();
-                updateProgress();
-                nextBtn.classList.remove('hidden');
-            } else {
-                // Camino Incorrecto
-                currentAttempts++;
-                btnElement.classList.add('incorrect');
-                btnElement.disabled = true;
-                
-                btnElement.classList.remove('shake');
-                void btnElement.offsetWidth;
-                btnElement.classList.add('shake');
-                
-                feedbackBox.className = 'feedback incorrect';
-                feedbackBox.innerHTML = `<strong>💡 Pista de redirección:</strong><br><br>${q.feedbackIncorrect}`;
-            }
-        }
-
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                updateProgress();
-                renderQuestion();
-            } else {
-                showResults();
-            }
-        }
-
-        function showResults() {
-            document.getElementById('quiz-container').style.display = 'none';
-            document.getElementById('progress-bar').style.width = '100%';
-            
-            const resultsContainer = document.getElementById('results-container');
-            resultsContainer.style.display = 'block';
-            
-            const finalPercentage = Math.round((score / (questions.length * 20)) * 100);
-            document.getElementById('final-score').textContent = `${finalPercentage}%`;
-            
-            let message = '';
-            let icon = '';
-            
-            if (finalPercentage === 100) {
-                icon = '🏆';
-                message = '¡Dominio excepcional! Tu capacidad para integrar la teoría sistémica con la dinámica humana te permite diagnosticar escenarios complejos sin dudar. Excelente nivel analítico.';
-                launchConfetti(); 
-            } else if (finalPercentage >= 80) {
-                icon = '🎯';
-                message = '¡Muy buen desempeño! Evidencias un manejo sólido de los ecosistemas organizacionales. Tu siguiente nivel es afinar la predicción de impactos macroeconómicos sobre el clima laboral.';
-            } else if (finalPercentage >= 60) {
-                icon = '📚';
-                message = 'Conocimiento adecuado. Comprendes las bases, pero el aprendizaje requirió iteración. Sugerimos revisar el concepto de "transmutación de recursos" de Drucker para agilizar tu toma de decisiones.';
-            } else {
-                icon = '💪';
-                message = 'Momento de reforzar. La complejidad organizacional requiere asimilar que las partes no operan aisladas. Identifica en tus propios proyectos cómo un cuello de botella logístico impacta en la motivación de tu equipo comercial.';
-            }
-            
-            document.getElementById('result-message').innerHTML = `<strong>${icon} Análisis del Perfil:</strong><br><br>${message}`;
-        }
-
+        // Función para lanzar confetti
         function launchConfetti() {
             const container = document.getElementById('confetti-container');
             const colors = ['#667eea', '#764ba2', '#f39c12', '#28a745', '#dc3545', '#17a2b8'];
             const confettiCount = 50;
-            
+
             for (let i = 0; i < confettiCount; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
@@ -312,25 +552,207 @@
                 confetti.style.animationDelay = Math.random() * 0.3 + 's';
                 confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
                 container.appendChild(confetti);
-                
+
                 setTimeout(() => confetti.remove(), 3000);
             }
         }
 
+        // Función para actualizar el progreso
+        function updateProgress() {
+            const progress = ((currentQuestion) / totalQuestions) * 100;
+            progressBar.style.width = progress + '%';
+            questionCounter.textContent = `Pregunta ${currentQuestion + 1} de ${totalQuestions}`;
+            scoreDisplay.textContent = `🏆 ${score}`;
+        }
+
+        // Función para renderizar la pregunta actual
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            let html = `
+                <div class="question-text">${q.text}</div>
+                <div class="options-container" id="options-container">
+            `;
+
+            q.options.forEach((option, index) => {
+                html += `
+                    <div class="option" id="option-${index}">
+                        <input type="radio" name="question" value="${index}" id="opt-${index}">
+                        <label for="opt-${index}">${option}</label>
+                    </div>
+                `;
+            });
+
+            html += `</div>
+                <div class="feedback" id="feedback-container"></div>
+                <div class="correct-answer-display" id="correct-answer-display"></div>
+            `;
+
+            quizContainer.innerHTML = html;
+
+            // Hacer toda la opción clickable
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    if (answered) return;
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        selectOption(parseInt(radio.value));
+                    }
+                });
+            });
+
+            // Si el usuario ya respondió esta pregunta, mostrar su respuesta anterior
+            if (userAnswers[currentQuestion] !== null) {
+                showFeedback(userAnswers[currentQuestion], true);
+            }
+
+            updateProgress();
+        }
+
+        // Función para seleccionar una opción
+        function selectOption(index) {
+            if (answered) return;
+            
+            answered = true;
+            userAnswers[currentQuestion] = index;
+            
+            showFeedback(index, false);
+        }
+
+        // Función para mostrar feedback
+        function showFeedback(selectedIndex, isRerender = false) {
+            const q = questions[currentQuestion];
+            const isCorrect = (selectedIndex === q.correct);
+
+            // Deshabilitar todas las opciones
+            const allOptions = document.querySelectorAll('.option');
+            const allRadios = document.querySelectorAll('input[type="radio"]');
+            
+            allOptions.forEach(opt => opt.classList.add('disabled'));
+            allRadios.forEach(radio => radio.disabled = true);
+
+            // Marcar visualmente
+            const selectedOptionDiv = document.getElementById(`option-${selectedIndex}`);
+            const correctOptionDiv = document.getElementById(`option-${q.correct}`);
+
+            if (isCorrect) {
+                selectedOptionDiv.classList.add('correct');
+                
+                // Sumar puntos SOLO si NO es rerender
+                if (!isRerender) {
+                    score += 10;
+                    userScores[currentQuestion] = 10;
+                    launchConfetti();
+                }
+            } else {
+                selectedOptionDiv.classList.add('incorrect');
+                correctOptionDiv.classList.add('correct');
+                
+                if (!isRerender) {
+                    userScores[currentQuestion] = 0;
+                }
+            }
+
+            // Actualizar score display
+            scoreDisplay.textContent = `🏆 ${score}`;
+
+            // Mostrar feedback
+            const feedbackContainer = document.getElementById('feedback-container');
+            const correctAnswerDisplay = document.getElementById('correct-answer-display');
+
+            if (isCorrect) {
+                feedbackContainer.className = 'feedback show correct-feedback';
+                feedbackContainer.innerHTML = `
+                    <div class="feedback-title">✓ ¡Correcto!</div>
+                    <p>${q.feedbackCorrect}</p>
+                `;
+                correctAnswerDisplay.classList.remove('show');
+            } else {
+                feedbackContainer.className = 'feedback show incorrect-feedback';
+                feedbackContainer.innerHTML = `
+                    <div class="feedback-title">✗ Respuesta incorrecta</div>
+                    <p>${q.feedbackIncorrect}</p>
+                `;
+                correctAnswerDisplay.innerHTML = `<strong>✓ Respuesta correcta:</strong> ${q.options[q.correct]}`;
+                correctAnswerDisplay.classList.add('show');
+            }
+
+            // Mostrar botón siguiente
+            nextBtn.classList.remove('hidden');
+        }
+
+        // Función para ir a la siguiente pregunta
+        function nextQuestion() {
+            currentQuestion++;
+            answered = false;
+            nextBtn.classList.add('hidden');
+
+            if (currentQuestion < totalQuestions) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Función para mostrar resultados
+        function showResults() {
+            quizContainer.style.display = 'none';
+            nextBtn.classList.add('hidden');
+            resultsContainer.classList.add('show');
+
+            const percentage = (score / (totalQuestions * 10)) * 100;
+            finalScoreSpan.textContent = `${score}/50`;
+
+            let message = '';
+            let icon = '';
+
+            if (percentage >= 100) {
+                icon = '🏆';
+                message = 'Dominio excepcional! Has comprendido a fondo que la empresa es un sistema social y productivo, y que la gestión de relaciones es el motor de la creación de valor. Entiendes perfectamente la visión integradora de Drucker y la importancia de las interacciones dinámicas entre personas, recursos y dirección.';
+                launchConfetti(); // Confetti bonus al 100%
+                
+            } else if (percentage >= 80) {
+                icon = '🎯';
+                message = 'Muy buen desempeño! Tienes una base sólida sobre la empresa como sistema. Revisa el feedback de las preguntas incorrectas para conectar aún mejor los conceptos de sistema, entorno y dirección. Presta especial atención a cómo la calidad de las relaciones humanas influye directamente en los resultados económicos.';
+                
+            } else if (percentage >= 60) {
+                icon = '📚';
+                message = 'Conocimiento adecuado. Comprendes las definiciones básicas de empresa como sistema y unidad económica-social. Te recomendamos repasar las páginas 33-42 del documento para profundizar en el rol central de la dirección, la interacción dinámica entre las partes, y cómo las relaciones humanas son fundamentales para la creación de valor.';
+                
+            } else {
+                icon = '💪';
+                message = 'Es momento de reforzar conceptos clave. Vuelve a leer el documento con atención, especialmente la idea de la "transmutación" de Drucker (pág. 33), la definición de sistema como elementos en interacción (pág. 17), y la diferencia entre entorno general y específico (págs. 28-29). Recuerda: la empresa no es una máquina, es una creación humana. ¡El esfuerzo vale la pena!';
+            }
+
+            resultMessageP.textContent = message;
+        }
+
+        // Función para resetear el quiz
         function resetQuiz() {
             currentQuestion = 0;
             score = 0;
-            currentAttempts = 0;
+            answered = false;
+            userAnswers = new Array(totalQuestions).fill(null);
+            userScores = new Array(totalQuestions).fill(0);
             
-            document.getElementById('results-container').style.display = 'none';
-            document.getElementById('quiz-container').style.display = 'block';
+            resultsContainer.classList.remove('show');
+            quizContainer.style.display = 'block';
+            
+            nextBtn.classList.add('hidden');
             
             updateProgress();
             renderQuestion();
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        resetQuiz();
+        // Event listeners
+        nextBtn.addEventListener('click', nextQuestion);
+        retryBtn.addEventListener('click', resetQuiz);
+
+        // Inicializar el quiz
+        renderQuestion();
     </script>
 </body>
 </html>
