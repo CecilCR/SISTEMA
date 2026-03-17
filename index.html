@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Empresa como Sistema - Quiz Interactivo</title>
-    <meta property="og:title" content="La Empresa como Sistema - Quiz Interactivo">
-    <meta property="og:description" content="Evalúa tu comprensión de la empresa como unidad económica y social">
+    <title>La Empresa como Sistema - Quiz Mejorado</title>
+    <meta property="og:title" content="La Empresa como Sistema - Quiz Mejorado">
+    <meta property="og:description" content="Evalúa tu comprensión de conceptos sistémicos avanzados">
     <meta property="og:type" content="sitio-web">
     <style>
         * {
@@ -32,9 +32,6 @@
             --incorrect-bg: #f8d7da;
             --incorrect-border: #dc3545;
             --incorrect-text: #721c24;
-            --hint-bg: #fff3cd;
-            --hint-border: #856404;
-            --hint-text: #856404;
             --option-hover-bg: #f0f4ff;
         }
 
@@ -142,27 +139,7 @@
         }
 
         .content {
-            padding: 40px 35px;
-        }
-
-        .question-container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            border: 2px solid #e0e0e0;
-            margin-bottom: 30px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            padding: 40px 30px;
         }
 
         .question-text {
@@ -174,21 +151,19 @@
         }
 
         .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            margin: 25px 0;
         }
 
         .option {
             background: white;
             border: 2px solid #e0e0e0;
+            padding: 18px 20px;
+            margin-bottom: 12px;
             border-radius: 10px;
-            padding: 16px 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            align-items: center;
         }
 
         .option:hover:not(.disabled) {
@@ -198,11 +173,10 @@
         }
 
         .option input[type="radio"] {
-            margin-top: 4px;
+            margin-right: 12px;
             cursor: pointer;
             width: 18px;
             height: 18px;
-            flex-shrink: 0;
         }
 
         .option label {
@@ -230,24 +204,14 @@
         }
 
         @keyframes pulseGreen {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.02);
-            }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
 
         @keyframes shake {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-10px);
-            }
-            75% {
-                transform: translateX(10px);
-            }
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
         }
 
         .feedback {
@@ -255,23 +219,12 @@
             padding: 20px;
             border-radius: 10px;
             line-height: 1.7;
-            animation: slideIn 0.4s ease;
             display: none;
+            animation: slideIn 0.4s ease;
         }
 
         .feedback.show {
             display: block;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .feedback.correct-feedback {
@@ -307,27 +260,37 @@
             display: block;
         }
 
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 14px 30px;
+            padding: 14px 32px;
+            font-size: 1.1em;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
+            margin-top: 20px;
             transition: all 0.3s ease;
-            display: inline-block;
-            text-align: center;
+            font-weight: 600;
         }
 
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             background: var(--secondary);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
-        .btn:active {
+        .btn:active:not(:disabled) {
             transform: translateY(0);
         }
 
@@ -335,11 +298,16 @@
             display: none;
         }
 
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
         .results {
             text-align: center;
             padding: 40px 20px;
             display: none;
-            animation: fadeIn 0.5s ease;
         }
 
         .results.show {
@@ -348,12 +316,12 @@
 
         .results h2 {
             color: var(--text-primary);
-            font-size: 2em;
             margin-bottom: 20px;
+            font-size: 2em;
         }
 
         .score-badge {
-            font-size: 3.5em;
+            font-size: 4em;
             font-weight: bold;
             color: var(--primary);
             margin: 20px 0;
@@ -361,25 +329,22 @@
 
         .results p {
             font-size: 1.2em;
-            line-height: 1.8;
             color: var(--text-secondary);
             margin: 20px 0;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            line-height: 1.6;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             .header h1 {
                 font-size: 1.8em;
             }
 
-            .content {
-                padding: 30px 20px;
+            .header p {
+                font-size: 1em;
             }
 
-            .question-container {
-                padding: 20px;
+            .content {
+                padding: 30px 20px;
             }
 
             .question-text {
@@ -390,6 +355,10 @@
                 padding: 14px 16px;
             }
 
+            .option label {
+                font-size: 0.95em;
+            }
+
             .top-bar {
                 padding: 15px 20px;
             }
@@ -398,19 +367,9 @@
                 font-size: 0.85rem;
                 padding: 6px 12px;
             }
-        }
 
-        @media (max-width: 480px) {
-            .header {
-                padding: 30px 20px;
-            }
-
-            .header h1 {
-                font-size: 1.5em;
-            }
-
-            .header p {
-                font-size: 0.95em;
+            .score-badge {
+                font-size: 3em;
             }
         }
     </style>
@@ -421,16 +380,16 @@
     <div class="container">
         <div class="header">
             <h1>🏢 La Empresa como Sistema</h1>
-            <p>Fundamentos para la Gestión de Relaciones Organizacionales</p>
+            <p>Conceptos Sistémicos Avanzados</p>
         </div>
 
         <div class="top-bar">
-            <span class="question-pill" id="question-counter">Pregunta 1 de 5</span>
+            <span class="question-pill" id="question-counter">Pregunta 1 de 4</span>
             <span class="score-pill" id="score-display">🏆 0</span>
         </div>
 
         <div class="progress-container">
-            <div class="progress-fill" id="progress-bar" style="width: 20%;"></div>
+            <div class="progress-fill" id="progress-bar" style="width: 25%;"></div>
         </div>
 
         <div class="content">
@@ -440,7 +399,7 @@
 
             <div id="results-container" class="results">
                 <h2>📊 Cuestionario completado</h2>
-                <div class="score-badge" id="final-score">0/5</div>
+                <div class="score-badge" id="final-score">0/4</div>
                 <p id="result-message"></p>
                 <button class="btn" id="retry-btn">🔄 Volver a intentar</button>
             </div>
@@ -454,7 +413,7 @@
         let currentQuestion = 0;
         let score = 0;
         let answered = false;
-        const totalQuestions = 5;
+        const totalQuestions = 4;
         let userAnswers = new Array(totalQuestions).fill(null);
         let userScores = new Array(totalQuestions).fill(0);
 
@@ -473,68 +432,55 @@
         const questions = [
             {
                 id: 1,
-                text: "¿Qué significa que la empresa es una 'unidad económica y social'?",
+                text: "Una corporación líder en fotografía analógica ignora el surgimiento de la tecnología digital. Sus gerentes deciden optimizar la eficiencia de la producción de rollos (proceso interno) y reducir costos, pero no logran detener la caída libre de sus ventas. ¿Qué error sistémico está causando el fracaso de esta empresa a pesar de optimizar sus procesos internos?",
                 options: [
-                    "Que solo busca generar ganancias económicas para sus accionistas",
-                    "Que las relaciones humanas son más importantes que los resultados financieros",
-                    "Un ente ideal con personalidad jurídica que, para generar valor, debe integrar las dimensiones productiva y relacional",
-                    "Que separa claramente los objetivos económicos de los objetivos sociales"
+                    "No invirtió suficiente en mejorar la calidad de sus rollos fotográficos",
+                    "Optimizó procesos internos pero ignoró las señales del mercado (sistema cerrado sin retroalimentación externa)",
+                    "No redujo costos lo suficientemente rápido para competir",
+                    "Sus empleados no trabajaron las horas necesarias para adaptarse"
                 ],
-                correct: 2,
-                feedbackCorrect: "✓ ¡Excelente! Has captado la esencia. El documento enfatiza que la empresa es 'una persona jurídica' (dimensión formal) pero también 'una creación humana' y un 'sistema social' (dimensión humana). La generación de valor (económico) depende directamente de la calidad de las relaciones (social). En nuestro curso, este es el punto de partida: no se puede gestionar una organización sin gestionar las relaciones que la constituyen.",
-                feedbackIncorrect: "✗ La respuesta correcta es la que integra ambas dimensiones: 'Un ente ideal con personalidad jurídica que, para generar valor, debe integrar las dimensiones productiva y relacional'. Las otras opciones son reduccionistas: la primera solo mira lo económico, la segunda aísla los resultados del proceso social, y la cuarta ve a la empresa como una máquina (visión que Drucker critica explícitamente). La gestión de relaciones es el puente entre lo económico y lo social."
+                correct: 1,
+                feedbackCorrect: "✓ ¡Excelente! La empresa se comportó como un sistema cerrado, optimizando solo sus procesos internos mientras ignoraba información crítica del entorno: el surgimiento de la tecnología digital. Este es un ejemplo clásico de entropía organizacional: cuando un sistema se aísla de su ambiente, inevitablemente se desgasta. Para sobrevivir (negentropía), debió usar la información del mercado como un INSUMO vital para transformar su modelo de negocio. La eficiencia interna sin adaptación externa acelera el fracaso. Los sistemas abiertos sobreviven justamente por su capacidad de procesar información ambiental y evolucionar.",
+                feedbackIncorrect: "✗ La respuesta correcta es: 'Optimizó procesos internos pero ignoró las señales del mercado'. La empresa actuó como sistema cerrado al enfocarse únicamente en eficiencia interna (mejor producción de rollos, menores costos) mientras ignoraba el cambio tecnológico del entorno. Este aislamiento causa entropía: el sistema se desgasta porque no importa información externa vital. Mejorar el producto antiguo o reducir costos no resuelve el problema si el mercado ya migró a otra tecnología. La negentropía (supervivencia) requiere apertura al ambiente para detectar amenazas y oportunidades."
             },
             {
                 id: 2,
-                text: "Según Peter Drucker, ¿qué es lo que realmente convierte los recursos en una empresa que genera valor?",
+                text: "El área de Finanzas de una exportadora decide recortar el presupuesto de 'Mantenimiento Preventivo' para mostrar mayores utilidades este mes. Dos semanas después, la maquinaria principal falla, deteniendo la producción y causando la pérdida de un contrato millonario. ¿Cómo explica este fenómeno el concepto de interrelación de las partes en un sistema?",
                 options: [
-                    "El capital financiero suficiente para invertir en tecnología",
-                    "La dirección que organiza, decide y transforma los recursos",
-                    "La maquinaria y equipos de producción modernos",
-                    "El tamaño de la organización y su participación de mercado"
+                    "Cada área debe ser evaluada solo por sus propios resultados mensuales",
+                    "El ahorro de Finanzas siempre es positivo para la empresa",
+                    "La empresa es un todo interconectado: una decisión local puede generar falla catastrófica en el objetivo sistémico",
+                    "Los sistemas empresariales no dependen de la coordinación entre áreas"
                 ],
-                correct: 1,
-                feedbackCorrect: "✓ ¡Correcto! Drucker lo dice claramente: convertir recursos en empresa 'requiere dirección'. No basta reunir recursos en orden lógico y 'girar la llave del capital'. Se necesita una 'transmutación' de los recursos, y esta solo puede venir de la dirección. Sin dirección, los recursos permanecen inertes. La dirección es el catalizador que da vida a la organización.",
-                feedbackIncorrect: "✗ La respuesta correcta es 'La dirección'. Drucker critica explícitamente la visión del siglo XIX que creía que bastaba reunir recursos y 'girar la llave del capital'. Lo que se necesita es una transmutación de los recursos, y esto requiere dirección. El capital, la tecnología y el tamaño son importantes, pero son recursos inertes sin la dirección que los organiza y transforma."
+                correct: 2,
+                feedbackCorrect: "✓ ¡Correcto! Este caso ilustra perfectamente la interrelación sistémica. Finanzas optimizó su resultado mensual (más utilidades a corto plazo), pero desencadenó un efecto dominó catastrófico en el sistema completo. La decisión local (recorte presupuesto) → falla operativa (maquinaria) → pérdida sistémica (contrato millonario). Esta cadena muestra que la empresa NO es suma de partes independientes: es un organismo interconectado donde cada subsistema afecta la salud del todo. El verdadero error fue evaluar a Finanzas SOLO por su ahorro mensual, ignorando el impacto en el objetivo sistémico total (rentabilidad sostenible). Esta pregunta evidencia por qué la gestión de relaciones entre áreas es crítica: sin coordinación, las decisiones locales destruyen valor global.",
+                feedbackIncorrect: "✗ La respuesta correcta enfatiza que la empresa es un 'todo interconectado'. En este caso, Finanzas tomó una decisión aparentemente racional (recortar gasto para aumentar utilidad) sin considerar el impacto en otras partes del sistema. El resultado fue un 'efecto dominó': el ahorro de corto plazo generó una pérdida catastrófica de largo plazo. Esta situación demuestra que los subsistemas NO operan independientemente: están interrelacionados. La falla en Mantenimiento (causada por decisión de Finanzas) afectó Producción y finalmente destruyó el objetivo comercial completo. Un sistema empresarial sano requiere que cada área considere el impacto de sus decisiones en el todo."
             },
             {
                 id: 3,
-                text: "Un equipo de ventas logra cerrar un contrato importante, pero el área de producción no fue informada a tiempo y no puede cumplir con los plazos prometidos. ¿Qué principio sistémico de la empresa se violó en esta situación?",
+                text: "Una cadena de restaurantes enfrenta dos cambios simultáneos: nueva legislación tributaria (SUNAT modifica el IGV) y cambio en preferencias del consumidor (demanda por comida saludable). ¿Qué característica de sistema abierto le permite sobrevivir a estos cambios?",
                 options: [
-                    "La independencia funcional que permite a cada área tomar decisiones autónomas sin consultar a otras",
-                    "La interrelación entre las partes del sistema, donde las acciones de un área impactan directamente en otras",
-                    "La especialización técnica que requiere que cada departamento se enfoque solo en su expertise",
-                    "La jerarquía organizacional que establece que solo la dirección debe coordinar entre áreas"
+                    "Mantenerse aislado para no perder su identidad original",
+                    "Intercambiar información con el entorno y adaptar sus procesos internos a las nuevas condiciones",
+                    "Enfocarse solo en maximizar ganancias sin importar el entorno",
+                    "Funcionar automáticamente sin necesidad de monitorear cambios externos"
                 ],
                 correct: 1,
-                feedbackCorrect: "✓ ¡Excelente análisis! Este caso ilustra perfectamente la definición de sistema: 'conjunto de elementos dinámicamente relacionados, en interacción'. Cuando ventas actúa sin considerar la capacidad de producción, rompe la interrelación necesaria entre subsistemas. El documento enfatiza que insumos, planeación, operación y resultados están interconectados con retroalimentación constante. El éxito organizacional depende de que todas las áreas comprendan cómo sus acciones afectan al sistema completo. Esta visión sistémica es crucial para la gestión de relaciones organizacionales.",
-                feedbackIncorrect: "✗ La respuesta correcta destaca la interrelación entre partes. El documento define sistema como elementos 'dinámicamente relacionados, en interacción' que 'desarrollan una actividad para lograr un objetivo' común. En el caso presentado, ventas y producción NO actuaron como partes interrelacionadas. Las opciones que proponen independencia, especialización aislada o coordinación solo desde arriba contradicen la naturaleza sistémica donde cada parte debe conocer y considerar el impacto de sus acciones en las demás para lograr objetivos organizacionales."
+                feedbackCorrect: "✓ ¡Muy bien! Un sistema abierto sobrevive gracias a su INTERCAMBIO constante con el ambiente: recibe información (nueva ley, preferencias), la procesa internamente (ajusta menú, procedimientos contables) y produce outputs adaptados (nuevos platos, cumplimiento tributario). La 'porosidad' con el entorno no es debilidad: es la estrategia de supervivencia. Sistemas cerrados mueren porque no detectan amenazas ni oportunidades. En cambio, sistemas abiertos transforman cambios externos en evolución interna. Este restaurante debe IMPORTAR información ambiental como insumo tan vital como los ingredientes físicos. Sin esa retroalimentación externa, cualquier empresa sucumbe a la entropía. El caso muestra que adaptabilidad NO es pérdida de identidad: es evolución inteligente basada en señales del entorno.",
+                feedbackIncorrect: "✗ La respuesta correcta es 'Intercambiar información con el entorno y adaptar procesos'. Los sistemas abiertos sobreviven porque mantienen intercambio permanente con su ambiente: detectan cambios (nueva ley, nuevas preferencias), procesan esa información internamente y ajustan sus operaciones. El aislamiento (opción a) lleva a la entropía: si el restaurante ignora la legislación o las preferencias del consumidor, eventualmente fracasa. Maximizar ganancias sin considerar el entorno (opción c) es comportamiento de sistema cerrado destinado al colapso. Los sistemas abiertos no funcionan automáticamente (opción d): requieren monitoreo activo del ambiente para importar información vital y evolucionar. La adaptabilidad es la clave de supervivencia."
             },
             {
                 id: 4,
-                text: "¿Cuál de los siguientes es un ejemplo de 'Ambiente Externo Específico' (y no de 'Ambiente Externo General')?",
+                text: "Una startup tecnológica tiene capital de inversión, oficinas equipadas con tecnología de punta y un producto innovador, pero sus tres cofundadores están en conflicto constante y no se comunican. La empresa no logra lanzar el producto al mercado. ¿Por qué este caso ejemplifica que la empresa es principalmente un sistema social?",
                 options: [
-                    "Una nueva ley tributaria que afecta a todas las empresas del país",
-                    "El surgimiento de un producto sustitutivo innovador en el mercado de la empresa",
-                    "Un cambio cultural hacia el consumo sostenible que impacta todas las industrias",
-                    "La construcción de una red nacional de internet de alta velocidad"
+                    "Porque necesitan contratar a un gerente de recursos humanos",
+                    "Porque los recursos técnicos y financieros solo se transforman en valor mediante coordinación de relaciones humanas efectivas",
+                    "Porque la tecnología no puede tomar decisiones éticas por sí misma",
+                    "Porque las empresas sin personería jurídica dependen solo de las personas"
                 ],
                 correct: 1,
-                feedbackCorrect: "✓ ¡Correcto! El documento explica que el ambiente específico incluye 'competidores actuales, potenciales' y 'productos substitutivos, alternativos'. Un producto sustitutivo innovador afecta directamente a la empresa y su sector específico. Las otras opciones pertenecen al ambiente general: nuevas leyes son factores político-legales, cambios culturales son factores sociológicos, e infraestructura tecnológica afecta a todas las empresas por igual.",
-                feedbackIncorrect: "✗ La respuesta correcta es el producto sustitutivo. El documento explica que el ambiente específico incluye clientes, proveedores, competidores y 'productos substitutivos, alternativos' que afectan directamente al sector. Las otras opciones son del ambiente general: las leyes son factores político-legales, los cambios culturales son sociológicos, y la infraestructura tecnológica afecta homogéneamente a todas las empresas."
-            },
-            {
-                id: 5,
-                text: "Una empresa tecnológica debe lanzar un producto innovador en 6 meses. El éxito depende de que ingeniería, marketing y operaciones trabajen coordinadamente. Si afirmamos que 'la empresa es un sistema social', ¿cuál es la principal responsabilidad del gerente general?",
-                options: [
-                    "Contratar más personal técnico para asegurar que cada área tenga recursos suficientes",
-                    "Establecer metas individuales ambiciosas para cada departamento y dejar que compitan entre sí",
-                    "Facilitar la comunicación, confianza y colaboración entre las áreas para alinearlas hacia el objetivo común",
-                    "Delegar completamente la coordinación a los jefes de cada área sin intervenir directamente"
-                ],
-                correct: 2,
-                feedbackCorrect: "✓ ¡Perfecto! Has comprendido la implicación gerencial del concepto 'sistema social'. El documento enfatiza que la coordinación de recursos depende de relaciones humanas efectivas, y que confianza, comunicación y liderazgo influyen directamente en resultados económicos. En este caso, el gerente no puede limitarse a asignar recursos o delegar: debe gestionar activamente las relaciones entre áreas. Esto es gestión de relaciones organizacionales en acción: crear las condiciones para que personas de diferentes subsistemas colaboren efectivamente hacia objetivos compartidos. Sin esto, los recursos técnicos no se transforman en valor.",
-                feedbackIncorrect: "✗ La respuesta correcta enfatiza que el gerente debe facilitar comunicación, confianza y colaboración. Como 'sistema social', la empresa no funciona solo con recursos (opción a) ni con competencia interna (opción b). El documento es claro: los factores relacionales influyen directamente en resultados. Tampoco es suficiente delegar (opción d): la gestión de relaciones es responsabilidad gerencial central, no algo que se puede tercerizar. El éxito del lanzamiento depende de que el gerente construya puentes entre las áreas, facilite el diálogo y alinee esfuerzos."
+                feedbackCorrect: "✓ ¡Excelente! Este caso muestra la TRANSMUTACIÓN en acción (o su ausencia). Drucker afirma que reunir recursos no crea una empresa: se necesita DIRECCIÓN que los transforme en valor. Esa transmutación ocurre a través de PERSONAS. Aquí hay capital, tecnología y producto (recursos), pero sin coordinación humana (comunicación, confianza, liderazgo) permanecen INERTES. No se transforman en valor económico. La 'magia' que convierte recursos en empresa es fundamentalmente SOCIAL: requiere alineación, colaboración y gestión de relaciones. Por eso afirmamos que la empresa es, ante todo, un sistema social: porque sin la dimensión relacional efectiva, todos los recursos técnicos y financieros quedan desactivados. Las personas son el catalizador de la transmutación. Sin ellas coordinadas, no hay empresa.",
+                feedbackIncorrect: "✗ La respuesta correcta enfatiza que los recursos 'solo se transforman en valor mediante coordinación de relaciones humanas'. Este startup tiene TODOS los recursos técnicos y financieros necesarios, pero NO tiene el elemento social que los active: coordinación entre cofundadores. Drucker llama a esto 'transmutación': el proceso por el cual recursos inertes se convierten en empresa generadora de valor. Esa transmutación NO ocurre automáticamente al reunir recursos: requiere DIRECCIÓN, y la dirección es fundamentalmente un proceso social (comunicación, liderazgo, confianza). Contratar RRHH (opción a) no resuelve el problema de fondo. El caso demuestra que la empresa es sistema social porque sin coordinación humana efectiva, los recursos permanecen improductivos."
             }
         ];
 
@@ -602,15 +548,10 @@
                 });
             });
 
-            // Si el usuario ya respondió esta pregunta, mostrar su respuesta anterior
-            if (userAnswers[currentQuestion] !== null) {
-                showFeedback(userAnswers[currentQuestion], true);
-            }
-
             updateProgress();
         }
 
-        // Función para seleccionar una opción
+        // Función para seleccionar opción
         function selectOption(index) {
             if (answered) return;
             
@@ -624,22 +565,21 @@
         function showFeedback(selectedIndex, isRerender = false) {
             const q = questions[currentQuestion];
             const isCorrect = (selectedIndex === q.correct);
-
+            
             // Deshabilitar todas las opciones
             const allOptions = document.querySelectorAll('.option');
             const allRadios = document.querySelectorAll('input[type="radio"]');
             
             allOptions.forEach(opt => opt.classList.add('disabled'));
             allRadios.forEach(radio => radio.disabled = true);
-
+            
             // Marcar visualmente
             const selectedOptionDiv = document.getElementById(`option-${selectedIndex}`);
             const correctOptionDiv = document.getElementById(`option-${q.correct}`);
-
+            
             if (isCorrect) {
                 selectedOptionDiv.classList.add('correct');
                 
-                // Sumar puntos SOLO si NO es rerender
                 if (!isRerender) {
                     score += 10;
                     userScores[currentQuestion] = 10;
@@ -653,14 +593,14 @@
                     userScores[currentQuestion] = 0;
                 }
             }
-
+            
             // Actualizar score display
             scoreDisplay.textContent = `🏆 ${score}`;
-
+            
             // Mostrar feedback
             const feedbackContainer = document.getElementById('feedback-container');
             const correctAnswerDisplay = document.getElementById('correct-answer-display');
-
+            
             if (isCorrect) {
                 feedbackContainer.className = 'feedback show correct-feedback';
                 feedbackContainer.innerHTML = `
@@ -674,20 +614,21 @@
                     <div class="feedback-title">✗ Respuesta incorrecta</div>
                     <p>${q.feedbackIncorrect}</p>
                 `;
-                correctAnswerDisplay.innerHTML = `<strong>✓ Respuesta correcta:</strong> ${q.options[q.correct]}`;
+                correctAnswerDisplay.innerHTML = 
+                    `<strong>✓ Respuesta correcta:</strong> ${q.options[q.correct]}`;
                 correctAnswerDisplay.classList.add('show');
             }
-
+            
             // Mostrar botón siguiente
             nextBtn.classList.remove('hidden');
         }
 
-        // Función para ir a la siguiente pregunta
+        // Función siguiente pregunta
         function nextQuestion() {
             currentQuestion++;
             answered = false;
             nextBtn.classList.add('hidden');
-
+            
             if (currentQuestion < totalQuestions) {
                 renderQuestion();
             } else {
@@ -695,40 +636,35 @@
             }
         }
 
-        // Función para mostrar resultados
+        // Función mostrar resultados
         function showResults() {
             quizContainer.style.display = 'none';
             nextBtn.classList.add('hidden');
             resultsContainer.classList.add('show');
-
+            
             const percentage = (score / (totalQuestions * 10)) * 100;
-            finalScoreSpan.textContent = `${score}/50`;
-
+            finalScoreSpan.textContent = `${score}/${totalQuestions * 10}`;
+            
             let message = '';
-            let icon = '';
-
+            
             if (percentage >= 100) {
-                icon = '🏆';
-                message = 'Dominio excepcional! Has comprendido a fondo que la empresa es un sistema social y productivo, y que la gestión de relaciones es el motor de la creación de valor. Entiendes perfectamente la visión integradora de Drucker y la importancia de las interacciones dinámicas entre personas, recursos y dirección.';
-                launchConfetti(); // Confetti bonus al 100%
+                message = '🏆 ¡Dominio excepcional de conceptos sistémicos avanzados! Has comprendido a profundidad entropía, interrelación, sistemas abiertos y transmutación. Tu capacidad para aplicar estos conceptos a casos concretos demuestra pensamiento sistémico maduro.';
+                launchConfetti();
                 
-            } else if (percentage >= 80) {
-                icon = '🎯';
-                message = 'Muy buen desempeño! Tienes una base sólida sobre la empresa como sistema. Revisa el feedback de las preguntas incorrectas para conectar aún mejor los conceptos de sistema, entorno y dirección. Presta especial atención a cómo la calidad de las relaciones humanas influye directamente en los resultados económicos.';
+            } else if (percentage >= 75) {
+                message = '🎯 ¡Muy buen desempeño! Tienes una comprensión sólida de los conceptos sistémicos. Revisa el feedback de las preguntas incorrectas para reforzar la conexión entre teoría y aplicación práctica en sistemas empresariales.';
                 
-            } else if (percentage >= 60) {
-                icon = '📚';
-                message = 'Conocimiento adecuado. Comprendes las definiciones básicas de empresa como sistema y unidad económica-social. Te recomendamos repasar las páginas 33-42 del documento para profundizar en el rol central de la dirección, la interacción dinámica entre las partes, y cómo las relaciones humanas son fundamentales para la creación de valor.';
+            } else if (percentage >= 50) {
+                message = '📚 Conocimiento adecuado de los fundamentos. Comprendes las definiciones básicas, pero te recomendamos profundizar en cómo estos conceptos se manifiestan en situaciones empresariales reales. Repasa especialmente los casos de entropía e interrelación.';
                 
             } else {
-                icon = '💪';
-                message = 'Es momento de reforzar conceptos clave. Vuelve a leer el documento con atención, especialmente la idea de la "transmutación" de Drucker (pág. 33), la definición de sistema como elementos en interacción (pág. 17), y la diferencia entre entorno general y específico (págs. 28-29). Recuerda: la empresa no es una máquina, es una creación humana. ¡El esfuerzo vale la pena!';
+                message = '💪 Es momento de reforzar conceptos sistémicos. Vuelve a revisar los materiales del curso enfocándote en: sistemas abiertos vs cerrados, entropía/negentropía, interrelación de subsistemas y transmutación. Estos conceptos son fundamentales para la gestión organizacional. ¡El esfuerzo vale la pena!';
             }
-
+            
             resultMessageP.textContent = message;
         }
 
-        // Función para resetear el quiz
+        // Función resetear quiz
         function resetQuiz() {
             currentQuestion = 0;
             score = 0;
@@ -738,7 +674,6 @@
             
             resultsContainer.classList.remove('show');
             quizContainer.style.display = 'block';
-            
             nextBtn.classList.add('hidden');
             
             updateProgress();
@@ -751,7 +686,7 @@
         nextBtn.addEventListener('click', nextQuestion);
         retryBtn.addEventListener('click', resetQuiz);
 
-        // Inicializar el quiz
+        // Inicialización
         renderQuestion();
     </script>
 </body>
